@@ -8,5 +8,5 @@ Go to each application and type
 >cargo run
 >
 
-### 1. Calculation of Weight on Mars - Test command line application
+### 1. mars_calc:: Calculation of Weight on Mars - Test command line application
 
