@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "marc_calc"
+name = "mars_calc"
 version = "0.1.0"
