@@ -1,2 +1,4 @@
 mars_calc/target/
 http_server/target/
+rust_streamer/target/
+rust_tcp_port_tester/target/
