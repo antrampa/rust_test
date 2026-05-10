@@ -4,10 +4,6 @@ use std::{io::Read, net::TcpListener};
     addr: String,
 }
 
-fn arr(a: &[u8]) {
-    println!("array: {}", a[0]);
-}
-
 impl Server {
     pub fn new(addr: String) -> Self {
         Self { addr }
@@ -22,9 +18,13 @@ impl Server {
 
             match listener.accept() {
                 Ok((mut stream, _)) => {
-                   let a = [1,2,6,8,8,8,3,4,5];
-                   arr(&a[0..3]);
-                   //stream.read();
+                   let mut buffer = [0; 1024]; //1kb
+                   match stream.read(&mut buffer) {
+                    Ok(_) => {
+                        println!("Received a request: {}", String::from_utf8_lossy(&buffer));
+                    }
+                    Err(e) => println!("Faild to read from connection: {}", e),
+                   }
                 },
                 Err(e) => println!("Faild to establish a connection: {}", e),
             }
