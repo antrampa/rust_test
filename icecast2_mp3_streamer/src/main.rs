@@ -333,20 +333,22 @@ fn main() {
         match connect_and_authenticate(&cfg) {
             Ok(mut stream) => {
                 loop {
-                    let cycle = build_cycle(&cfg);
-                    println!("--- New cycle: {} tracks ---", cycle.len());
+                    loop {
+                        let cycle = build_cycle(&cfg);
+                        println!("--- New cycle: {} tracks ---", cycle.len());
 
-                    let mut cycle_ok = true;
-                    for track in &cycle {
-                        if let Err(e) = stream_file(&mut stream, &cfg, track) {
-                            eprintln!("Stream error: {} — reconnecting...", e);
-                            cycle_ok = false;
-                            break;
+                        let mut cycle_ok = true;
+                        for track in &cycle {
+                            if let Err(e) = stream_file(&mut stream, &cfg, track) {
+                                eprintln!("Stream error: {} — reconnecting...", e);
+                                cycle_ok = false;
+                                break;
+                            }
                         }
-                    }
 
-                    if !cycle_ok {
-                        break; // Break inner loop to reconnect
+                        if !cycle_ok {
+                            break; // Break inner loop to reconnect
+                        }
                     }
                 }
             }
