@@ -5,7 +5,7 @@ use std::{io::Read, net::TcpListener};
 }
 
 fn arr(a: &[u8]) {
-
+    println!("array: {}", a[0]);
 }
 
 impl Server {
@@ -22,8 +22,8 @@ impl Server {
 
             match listener.accept() {
                 Ok((mut stream, _)) => {
-                   let a = [1,2,3,4,5];
-                   arr(&a);
+                   let a = [1,2,6,8,8,8,3,4,5];
+                   arr(&a[0..3]);
                    //stream.read();
                 },
                 Err(e) => println!("Faild to establish a connection: {}", e),
