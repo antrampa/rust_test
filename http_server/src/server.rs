@@ -9,15 +9,16 @@ impl Server {
         Self { addr }
     }
 
-    pub fn run(self) {
+    pub fn run(self) -> (i32, &str, std::net::TcpListener) {
         println!("Listening on {}", self.addr);
 
         let listener = TcpListener::bind(&self.addr).unwrap();
 
-        // 'outer: loop {
-        //     loop {
-        //         break 'outer
-        //     }
-        // }
+        loop {
+            listener.accept();
+        }
+
+        let tup = (5, "a", listener);
+
     }
 }
