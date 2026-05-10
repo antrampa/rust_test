@@ -1,5 +1,5 @@
-host=134.209.201.167
-port=8080
+host=SERVER_IP
+port=PORT_NUMBER
 mount=/stream
 password=your_password_here
 name=My Rust Stream
