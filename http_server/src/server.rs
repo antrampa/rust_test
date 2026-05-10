@@ -9,16 +9,35 @@ impl Server {
         Self { addr }
     }
 
-    pub fn run(self) -> (i32, &str, std::net::TcpListener) {
+    pub fn run(self) {
         println!("Listening on {}", self.addr);
 
         let listener = TcpListener::bind(&self.addr).unwrap();
 
         loop {
-            listener.accept();
+
+            match listener.accept() {
+                Ok((stream, _)) => {
+                    let a = 5;
+                    println!("Ok");
+                },
+                Err(e) => println!("Faild to establish a connection: {}", e),
+                //_ => print!("###"),
+            }
+
+            match "abcd" {
+                "abcd" => println!("WWW"),
+                "a" | "b" => {},
+                _ => {}
+            }
+
+            let res = listener.accept();
+            if res.is_err() {
+                continue;
+            }
+
+            let (stream, addr) = res.unwrap();
+
         }
-
-        let tup = (5, "a", listener);
-
     }
 }
