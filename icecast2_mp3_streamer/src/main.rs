@@ -67,17 +67,37 @@ fn list_mp3s(folder: &str) -> Vec<PathBuf> {
         eprintln!("Warning: folder does not exist: {}", folder);
         return vec![];
     }
-    let mut files: Vec<PathBuf> = fs::read_dir(path)
-        .unwrap()
-        .filter_map(|e| e.ok())
-        .map(|e| e.path())
-        .filter(|p| {
-            p.extension()
+
+    let mut files: Vec<PathBuf> = vec![];
+    let mut dirs_to_scan: Vec<PathBuf> = vec![path.to_path_buf()];
+
+    // Walk all subdirectories at any depth using a stack
+    while let Some(current_dir) = dirs_to_scan.pop() {
+        let entries = match fs::read_dir(&current_dir) {
+            Ok(e) => e,
+            Err(e) => {
+                eprintln!("Warning: cannot read folder {}: {}", current_dir.display(), e);
+                continue;
+            }
+        };
+
+        for entry in entries.filter_map(|e| e.ok()) {
+            let entry_path = entry.path();
+
+            if entry_path.is_dir() {
+                // Push subdirectory onto the stack to scan later
+                dirs_to_scan.push(entry_path);
+            } else if entry_path
+                .extension()
                 .and_then(|e| e.to_str())
                 .map(|e| e.eq_ignore_ascii_case("mp3"))
                 .unwrap_or(false)
-        })
-        .collect();
+            {
+                files.push(entry_path);
+            }
+        }
+    }
+
     files.sort();
     files
 }
@@ -289,6 +309,12 @@ fn build_cycle(cfg: &Config) -> Vec<PathBuf> {
     shuffle(&mut truck_e);
     for track in truck_e.iter().take(3) {
         cycle.push(track.clone());
+    }
+
+     // Step 3: 2-5 random tracks from trucks-3
+    let truck_3 = list_mp3s(&cfg.folder_truck_3);
+    for t in pick_random_count(&truck_3, 2, 5) {
+        cycle.push(t.clone());
     }
 
     // Step 2: 1 random track from truck-1
