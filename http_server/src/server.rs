@@ -1,7 +1,11 @@
- use std::net::TcpListener;
+use std::{io::Read, net::TcpListener};
 
  pub struct Server {
     addr: String,
+}
+
+fn arr(a: &[u8]) {
+
 }
 
 impl Server {
@@ -17,27 +21,13 @@ impl Server {
         loop {
 
             match listener.accept() {
-                Ok((stream, _)) => {
-                    let a = 5;
-                    println!("Ok");
+                Ok((mut stream, _)) => {
+                   let a = [1,2,3,4,5];
+                   arr(&a);
+                   //stream.read();
                 },
                 Err(e) => println!("Faild to establish a connection: {}", e),
-                //_ => print!("###"),
             }
-
-            match "abcd" {
-                "abcd" => println!("WWW"),
-                "a" | "b" => {},
-                _ => {}
-            }
-
-            let res = listener.accept();
-            if res.is_err() {
-                continue;
-            }
-
-            let (stream, addr) = res.unwrap();
-
         }
     }
 }
