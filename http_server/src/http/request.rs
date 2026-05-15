@@ -5,7 +5,9 @@ use std::error::Error;
 use std::fmt::{Debug, Display, Formatter, Result as FmtResult};
 use std::str;
 use std::str::Utf8Error;
+//use std::io::{Write, Result};
 
+#[derive(Debug)]
 pub struct Request<'buf> {
     path: &'buf str,
     query_string: Option<QueryString<'buf>>,
@@ -88,30 +90,14 @@ impl From<Utf8Error> for ParseError {
 
 impl Display for ParseError {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        write!(f, "{}", self.message());
+        write!(f, "{}", self.message())
     }
 }
 
 impl Debug for ParseError {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        write!(f, "{}", self.message());
+        write!(f, "{}", self.message())
     }
 }
 
 impl Error for ParseError {}
-
-// trait Encrypt {
-//     fn encrypt(&self) -> Self;
-// }
-
-// impl Encrypt for String {
-//     fn encrypt(&self) -> Self {
-//         unimplemented!()
-//     }
-// }
-
-// impl Encrypt for &[u8] {
-//     fn encrypt(&self) -> Self {
-//         unimplemented!()
-//     }
-// }
