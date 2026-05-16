@@ -8,17 +8,17 @@ pub struct WebsiteHandler {
 
 impl WebsiteHandler {
     pub fn new(public_path: String) -> Self {
-        Self { public_path }
+        Self { public_path}
     }
 
     fn read_file(&self, file_path: &str) -> Option<String> {
         let path = format!("{}/{}", self.public_path, file_path);
-        //fs::read_to_string(path).ok()
+        let canonical_public = fs::canonicalize(&self.public_path).ok()?;
         match fs::canonicalize(path) {
             Ok(path) => {
                 println!("Path: {}", path.to_string_lossy());
-                println!("public_path: {}", &self.public_path);
-                if path.starts_with( &self.public_path) {
+                println!("canonical_public: {}", canonical_public.to_string_lossy());
+                if path.starts_with( &canonical_public) {
                     fs::read_to_string(path).ok()
                 } else {
                     println!("Directory Traversal Attack Attemplted: {}", file_path);
