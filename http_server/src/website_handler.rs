@@ -15,11 +15,9 @@ impl WebsiteHandler {
         let path = format!("{}/{}", self.public_path, file_path);
         let canonical_public = fs::canonicalize(&self.public_path).ok()?;
         match fs::canonicalize(path) {
-            Ok(path) => {
-                println!("Path: {}", path.to_string_lossy());
-                println!("canonical_public: {}", canonical_public.to_string_lossy());
-                if path.starts_with( &canonical_public) {
-                    fs::read_to_string(path).ok()
+            Ok(canonical_path) => {
+                if canonical_path.starts_with( &canonical_public) {
+                    fs::read_to_string(canonical_path).ok()
                 } else {
                     println!("Directory Traversal Attack Attemplted: {}", file_path);
                     None
