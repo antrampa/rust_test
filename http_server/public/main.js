@@ -1,0 +1,1 @@
+console.log("Hello from Simple and Free Rust Webserver!!!");
