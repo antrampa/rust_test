@@ -5,3 +5,6 @@ rust_tcp_port_tester/target/
 icecast2_mp3_streamer/target/
 *.exe
 *.pdb
+http_server/.DS_Store
+icecast2_mp3_streamer/.DS_Store
+.DS_Store
