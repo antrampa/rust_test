@@ -8,3 +8,4 @@ icecast2_mp3_streamer/target/
 http_server/.DS_Store
 icecast2_mp3_streamer/.DS_Store
 .DS_Store
+rust_copy/target/
