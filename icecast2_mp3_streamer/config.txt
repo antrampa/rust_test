@@ -8,3 +8,4 @@ folders_truck_e=C:\music\truck-e
 folders_truck_1=C:\music\truck-1
 folders_truck_3=C:\music\trucks-3
 folders_options=C:\music\truck-options
+sleeping_time=3
