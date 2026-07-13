@@ -5,6 +5,7 @@ use std::net::TcpStream;
 use std::path::{Path, PathBuf};
 use std::thread;
 use std::time::{Duration, Instant};
+use std::io::ErrorKind;
 
 // ---------------------------------------------------------------
 // Config
@@ -21,6 +22,7 @@ struct Config {
     folder_truck_1: String,
     folder_truck_3: String,
     folder_options: String,
+    sleeping_time: u64,
 }
 
 fn load_config(path: &str) -> Config {
@@ -55,6 +57,7 @@ fn load_config(path: &str) -> Config {
         folder_truck_1: get("folders_truck_1"),
         folder_truck_3: get("folders_truck_3"),
         folder_options: get("folders_options"),
+        sleeping_time:  get("sleeping_time").parse().expect("Invalid bitrate"),
     }
 }
 
@@ -359,6 +362,7 @@ fn main() {
         match connect_and_authenticate(&cfg) {
             Ok(mut stream) => {
                 loop {
+                    let mut broken_pipe = false;
                     loop {
                         let cycle = build_cycle(&cfg);
                         println!("--- New cycle: {} tracks ---", cycle.len());
@@ -368,13 +372,26 @@ fn main() {
                             if let Err(e) = stream_file(&mut stream, &cfg, track) {
                                 eprintln!("Stream error: {} — reconnecting...", e);
                                 cycle_ok = false;
+                                if e.kind() == ErrorKind::BrokenPipe {
+                                    broken_pipe = true;
+                                }
                                 break;
                             }
+                            //Sleep 3 seconds
+                            thread::sleep(Duration::from_secs(3));
                         }
 
                         if !cycle_ok {
                             break; // Break inner loop to reconnect
                         }
+
+                        if broken_pipe {
+                            break; 
+                        }
+                    }
+
+                    if broken_pipe {
+                        break; 
                     }
                 }
             }
